@@ -3,10 +3,10 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Scholarship", href: "/scholarship" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -41,16 +41,10 @@ export default function Navbar() {
         </div>
         <div className="flex flex-1 items-center justify-end gap-x-6">
           <a
-            href="#"
-            className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 lg:text-gray-900"
-          >
-            Log in
-          </a>
-          <a
-            href="#"
+            href="/login"
             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Sign up
+            Join Now
           </a>
         </div>
         <div className="flex lg:hidden">
@@ -81,10 +75,10 @@ export default function Navbar() {
               />
             </a>
             <a
-              href="#"
+              href="/login"
               className="ml-auto rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Sign up
+              Join Now
             </a>
             <button
               type="button"
@@ -107,14 +101,6 @@ export default function Navbar() {
                     {item.name}
                   </a>
                 ))}
-              </div>
-              <div className="py-6">
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </a>
               </div>
             </div>
           </div>

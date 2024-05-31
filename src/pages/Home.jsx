@@ -1,11 +1,15 @@
-import Navbar from "../components/Navbar"
+import FAQs from "../components/FAQs";
+import ScholarshipCard from "../components/ScholarshipCard";
+import Trasted from "../components/Trasted";
 
 const Home = () => {
   return (
     <div>
-        <Navbar></Navbar>
+      <ScholarshipCard></ScholarshipCard>
+      <Trasted></Trasted>
+      <FAQs></FAQs>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

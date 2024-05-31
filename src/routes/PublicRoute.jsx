@@ -9,6 +9,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Admin from "../layouts/dashboard/Admin";
 import AdminHome from "../pages/Dashboard/AdminHome";
+import MyProfile from "../layouts/dashboard/MyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -45,12 +46,16 @@ export const router = createBrowserRouter([
 
   // Dashboard routes
   {
-    path: "/dashboard",
+    path: "dashboard",
     element: <Admin></Admin>,
     children: [
       {
         index: true,
         element: <AdminHome></AdminHome>,
+      },
+      {
+        path: "profile",
+        element: <MyProfile></MyProfile>,
       },
     ],
   },

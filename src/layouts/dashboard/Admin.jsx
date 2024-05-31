@@ -26,13 +26,13 @@ import {
 import {
   Bars3Icon,
   BellIcon,
-  CalendarIcon,
-  ChartPieIcon,
+  ChatBubbleOvalLeftIcon,
   Cog6ToothIcon,
   DocumentDuplicateIcon,
-  FolderIcon,
+  DocumentTextIcon,
   HomeIcon,
-  UsersIcon,
+  PlusCircleIcon,
+  UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -43,11 +43,27 @@ import { Outlet } from "react-router-dom";
 
 const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Team", href: "#", icon: UsersIcon, current: false },
-  { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
+  { name: "My Profile", href: "dashboard/profile", icon: UserIcon, current: false },
+  {
+    name: "My Application",
+    href: "/application",
+    icon: DocumentTextIcon,
+    current: false,
+  },
+  {
+    name: "My Reviews",
+    href: "#",
+    icon: ChatBubbleOvalLeftIcon,
+    current: false,
+  },
+  { name: "Add Scholarship", href: "#", icon: PlusCircleIcon, current: false },
+  {
+    name: "All applied Scholarship",
+    href: "#",
+    icon: DocumentDuplicateIcon,
+    current: false,
+  },
+  { name: "Manage Scholaship", href: "#", icon: Cog6ToothIcon, current: false },
 ];
 const teams = [
   { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },

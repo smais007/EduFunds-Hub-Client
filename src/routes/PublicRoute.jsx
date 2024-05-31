@@ -6,7 +6,7 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Scholarship from "../pages/Scholarship";
 import Login from "../pages/Login";
-
+import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
   {
@@ -28,12 +28,16 @@ export const router = createBrowserRouter([
       },
       {
         path: "/scholarship",
-        element: <Scholarship></Scholarship>
+        element: <Scholarship></Scholarship>,
       },
       {
-        path:"/login",
-        element: <Login></Login>
-      }
+        path: "/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "/register",
+        element: <Register></Register>,
+      },
     ],
   },
 ]);

@@ -7,6 +7,8 @@ import Contact from "../pages/Contact";
 import Scholarship from "../pages/Scholarship";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Admin from "../layouts/dashboard/Admin";
+import AdminHome from "../pages/Dashboard/AdminHome";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +39,18 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+    ],
+  },
+
+  // Dashboard routes
+  {
+    path: "/dashboard",
+    element: <Admin></Admin>,
+    children: [
+      {
+        index: true,
+        element: <AdminHome></AdminHome>,
       },
     ],
   },

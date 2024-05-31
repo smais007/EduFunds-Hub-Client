@@ -43,10 +43,15 @@ import { Outlet } from "react-router-dom";
 
 const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "My Profile", href: "dashboard/profile", icon: UserIcon, current: false },
+  {
+    name: "My Profile",
+    href: "profile",
+    icon: UserIcon,
+    current: false,
+  },
   {
     name: "My Application",
-    href: "/application",
+    href: "my-application",
     icon: DocumentTextIcon,
     current: false,
   },
@@ -56,7 +61,12 @@ const navigation = [
     icon: ChatBubbleOvalLeftIcon,
     current: false,
   },
-  { name: "Add Scholarship", href: "#", icon: PlusCircleIcon, current: false },
+  {
+    name: "Add Scholarship",
+    href: "add-scholarship",
+    icon: PlusCircleIcon,
+    current: false,
+  },
   {
     name: "All applied Scholarship",
     href: "#",

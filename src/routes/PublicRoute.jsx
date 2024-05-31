@@ -10,6 +10,7 @@ import Register from "../pages/Register";
 import Admin from "../layouts/dashboard/Admin";
 import AdminHome from "../pages/Dashboard/AdminHome";
 import MyProfile from "../layouts/dashboard/MyProfile";
+import AddScholarship from "../layouts/dashboard/AddScholarship";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <MyProfile></MyProfile>,
+      },
+      {
+        path: "add-scholarship",
+        element: <AddScholarship></AddScholarship>
       },
     ],
   },

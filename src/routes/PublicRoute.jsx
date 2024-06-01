@@ -11,6 +11,7 @@ import Admin from "../layouts/dashboard/Admin";
 import AdminHome from "../pages/Dashboard/AdminHome";
 import MyProfile from "../layouts/dashboard/MyProfile";
 import AddScholarship from "../layouts/dashboard/AddScholarship";
+import ManageUsers from "../layouts/dashboard/ManageUsers";
 
 export const router = createBrowserRouter([
   {
@@ -60,7 +61,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "add-scholarship",
-        element: <AddScholarship></AddScholarship>
+        element: <AddScholarship></AddScholarship>,
+      },
+      {
+        path: "manage-users",
+        element: <ManageUsers></ManageUsers>,
       },
     ],
   },

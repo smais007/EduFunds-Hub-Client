@@ -49,7 +49,7 @@ export default function UserAvarter() {
             <div className="px-4 py-3">
               <p className="text-sm">Signed in as</p>
               <p className="truncate text-sm font-medium text-gray-900">
-                {user.email}
+                {user?.email}
               </p>
             </div>
             <Menu.Item>

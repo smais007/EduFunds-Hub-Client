@@ -16,6 +16,7 @@ import MyApplication from "../layouts/dashboard/MyApplication";
 import MyReview from "@/pages/Dashboard/MyReview";
 import ManageScholarships from "@/pages/Dashboard/ManageScholarships";
 import ManageReviews from "@/pages/Dashboard/ManageReviews";
+import AllAppliedScholarship from "@/pages/Dashboard/AllAppliedScholarship";
 
 export const router = createBrowserRouter([
   {
@@ -82,6 +83,10 @@ export const router = createBrowserRouter([
       {
         path: "add-scholarship",
         element: <AddScholarship></AddScholarship>,
+      },
+      {
+        path: "all-applied-scholarship",
+        element: <AllAppliedScholarship></AllAppliedScholarship>,
       },
       {
         path: "manage-users",

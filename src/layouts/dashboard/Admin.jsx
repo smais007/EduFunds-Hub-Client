@@ -72,7 +72,7 @@ const navigation = [
   },
   {
     name: "All applied Scholarship",
-    href: "#",
+    href: "all-applied-scholarship",
     icon: DocumentDuplicateIcon,
     current: false,
   },

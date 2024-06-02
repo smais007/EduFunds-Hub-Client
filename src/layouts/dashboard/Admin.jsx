@@ -59,7 +59,7 @@ const navigation = [
   },
   {
     name: "My Reviews",
-    href: "#",
+    href: "my-reviews",
     icon: ChatBubbleOvalLeftIcon,
     current: false,
   },

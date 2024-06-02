@@ -13,6 +13,7 @@ import MyProfile from "../layouts/dashboard/MyProfile";
 import AddScholarship from "../layouts/dashboard/AddScholarship";
 import ManageUsers from "../layouts/dashboard/ManageUsers";
 import MyApplication from "../layouts/dashboard/MyApplication";
+import MyReview from "@/pages/Dashboard/MyReview";
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: "my-application",
         element: <MyApplication></MyApplication>,
+      },
+      {
+        path: "my-reviews",
+        element: <MyReview></MyReview>,
       },
       {
         path: "add-scholarship",

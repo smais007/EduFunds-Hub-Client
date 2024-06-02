@@ -1,5 +1,4 @@
 import {
-  
   DocumentTextIcon,
   PencilSquareIcon,
   XCircleIcon,
@@ -133,7 +132,7 @@ export default function MyApplication() {
                       {person.email}
                     </dd>
                     <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                      Add Review
+                      <button> Add Review</button>
                     </dd>
                   </dl>
                 </td>
@@ -173,7 +172,7 @@ export default function MyApplication() {
                   </a>
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  Add review
+                  <button> Add review</button>
                 </td>
               </tr>
             ))}

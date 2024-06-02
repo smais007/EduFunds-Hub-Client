@@ -44,7 +44,7 @@ import { Outlet } from "react-router-dom";
 import Footer from "../../components/DashboardComponent/Footer";
 
 const navigation = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
+  { name: "Dashboard", href: "dashboard", icon: HomeIcon, current: false },
   {
     name: "My Profile",
     href: "profile",
@@ -55,7 +55,7 @@ const navigation = [
     name: "My Application",
     href: "my-application",
     icon: DocumentTextIcon,
-    current: false,
+    current: true,
   },
   {
     name: "My Reviews",

@@ -12,6 +12,7 @@ import AdminHome from "../pages/Dashboard/AdminHome";
 import MyProfile from "../layouts/dashboard/MyProfile";
 import AddScholarship from "../layouts/dashboard/AddScholarship";
 import ManageUsers from "../layouts/dashboard/ManageUsers";
+import MyApplication from "../layouts/dashboard/MyApplication";
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <MyProfile></MyProfile>,
+      },
+      {
+        path: "my-application",
+        element: <MyApplication></MyApplication>,
       },
       {
         path: "add-scholarship",

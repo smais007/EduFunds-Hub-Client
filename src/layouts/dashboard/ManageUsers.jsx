@@ -1,3 +1,5 @@
+import Dropdowns from "../../components/DashboardComponent/Dropdowns";
+
 const people = [
   {
     name: "Lindsay Walton",
@@ -122,7 +124,7 @@ export default function ManageUsers() {
                     >
                       {person.name}
                     </td>
-                    
+
                     <td
                       className={classNames(
                         personIdx !== people.length - 1
@@ -134,14 +136,15 @@ export default function ManageUsers() {
                       {person.email}
                     </td>
                     <td
-                      className={classNames(
+                      className= {classNames(
                         personIdx !== people.length - 1
                           ? "border-b border-gray-200"
                           : "",
                         "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       )}
                     >
-                      {person.role}
+                      <div className="flex gap-1">{person.role}
+                      <Dropdowns></Dropdowns></div>
                     </td>
                     <td
                       className={classNames(
@@ -153,9 +156,9 @@ export default function ManageUsers() {
                     >
                       <a
                         href="#"
-                        className="text-indigo-600 hover:text-indigo-900"
+                        className="text-red-500 hover:text-red-700"
                       >
-                        Edit<span className="sr-only">, {person.name}</span>
+                        Delete<span className="sr-only">, {person.name}</span>
                       </a>
                     </td>
                   </tr>

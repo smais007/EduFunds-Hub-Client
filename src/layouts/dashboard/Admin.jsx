@@ -26,6 +26,7 @@ import {
 import {
   Bars3Icon,
   BellIcon,
+  ChatBubbleLeftRightIcon,
   ChatBubbleOvalLeftIcon,
   Cog6ToothIcon,
   DocumentDuplicateIcon,
@@ -75,7 +76,18 @@ const navigation = [
     icon: DocumentDuplicateIcon,
     current: false,
   },
-  { name: "Manage Scholaship", href: "#", icon: Cog6ToothIcon, current: false },
+  {
+    name: "Manage Scholaship",
+    href: "manage-scholarships",
+    icon: Cog6ToothIcon,
+    current: false,
+  },
+  {
+    name: "Manage Reviews",
+    href: "manage-reviews",
+    icon: ChatBubbleLeftRightIcon,
+    current: false,
+  },
   {
     name: "Manage Users",
     href: "manage-users",

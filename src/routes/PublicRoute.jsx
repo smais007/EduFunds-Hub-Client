@@ -14,6 +14,8 @@ import AddScholarship from "../layouts/dashboard/AddScholarship";
 import ManageUsers from "../layouts/dashboard/ManageUsers";
 import MyApplication from "../layouts/dashboard/MyApplication";
 import MyReview from "@/pages/Dashboard/MyReview";
+import ManageScholarships from "@/pages/Dashboard/ManageScholarships";
+import ManageReviews from "@/pages/Dashboard/ManageReviews";
 
 export const router = createBrowserRouter([
   {
@@ -68,6 +70,14 @@ export const router = createBrowserRouter([
       {
         path: "my-reviews",
         element: <MyReview></MyReview>,
+      },
+      {
+        path: "manage-scholarships",
+        element: <ManageScholarships></ManageScholarships>,
+      },
+      {
+        path: "manage-reviews",
+        element: <ManageReviews></ManageReviews>,
       },
       {
         path: "add-scholarship",

@@ -9,6 +9,7 @@ import { AuthContext } from "../context/AuthProvider";
 export default function Signup() {
   const { createUser, updateUserProfile, googleLogin, githubLogin } =
     useContext(AuthContext);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -18,10 +19,6 @@ export default function Signup() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  // useEffect(() => {
-  //   document.title = "Paradice Cave | Registration";
-  // }, []);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,17 +37,16 @@ export default function Signup() {
       return;
     }
 
-    createUser(email, password)
-      .then(() => {
-        updateUserProfile(fullName, image).then(() => {
-          toast.success("Your account created succesfully");
-          navigate(location?.state ? location.state : "/");
-        });
-      })
-      // .catch((error) => {
-      //   console.log(error);
-      //   toast.error("Something went wrong! Try again");
-      // });
+    createUser(email, password).then(() => {
+      updateUserProfile(fullName, image).then(() => {
+        toast.success("Your account created succesfully");
+        navigate(location?.state ? location.state : "/");
+      });
+    });
+    // .catch((error) => {
+    //   console.log(error);
+    //   toast.error("Something went wrong! Try again");
+    // });
   };
 
   return (

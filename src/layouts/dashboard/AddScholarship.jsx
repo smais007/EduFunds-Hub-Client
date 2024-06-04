@@ -1,22 +1,73 @@
-/*
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { PhotoIcon } from "@heroicons/react/24/solid";
+import { Navigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function AddScholarship() {
+  const handleAddScholarship = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const scholarship_name = form.scholarship_name.value;
+    const university_name = form.university_name.value;
+    const local_ranking = form.local_ranking.value;
+    const world_ranking = form.world_ranking.value;
+    const description = form.description.value;
+    const file_upload = form.file_upload.value;
+    const country = form.country.value;
+    const city = form.city.value;
+    const street_address = form.street_address.value;
+    const region = form.region.value;
+    const postal_code = form.postal_code.value;
+    const subject_category = form.subject_category.value;
+    const scholarship_category = form.scholarship_category.value;
+    const programme = form.programme.value;
+    const tution_fee = form.tution_fee.value;
+    const application_fee = form.application_fee.value;
+    const service_charge = form.service_charge.value;
+    const posted_date = new Date();
+
+    const addScholarship = {
+      scholarship_name,
+      university_name,
+      local_ranking,
+      world_ranking,
+      description,
+      country,
+      city,
+      street_address,
+      region,
+      postal_code,
+      subject_category,
+      scholarship_category,
+      programme,
+      tution_fee,
+      application_fee,
+      service_charge,
+      posted_date,
+      file_upload,
+    };
+
+    console.log(addScholarship);
+
+    fetch("http://localhost:5000/scholarships", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(addScholarship),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.insertedId) {
+          toast.success("Scholarship added Succesfully!");
+          form.reset();
+          Navigate(location?.state ? location.state : "/dashboard");
+        }
+      });
+  };
+
   return (
-    <form>
+    <form onSubmit={handleAddScholarship}>
       <div className="space-y-12">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
           <div>
@@ -40,9 +91,9 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="scholarship-name"
-                  id="scholarship-name"
-                  autoComplete="scholarship-name"
+                  name="scholarship_name"
+                  id="scholarship_name"
+                  autoComplete="scholarship_name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -57,8 +108,8 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="university-name"
-                  id="university-name"
+                  name="university_name"
+                  id="university_name"
                   autoComplete="university-name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -74,9 +125,9 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="first-name"
-                  id="first-name"
-                  autoComplete="given-name"
+                  name="local_ranking"
+                  id="local_ranking"
+                  autoComplete="number"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -91,10 +142,10 @@ export default function AddScholarship() {
               </label>
               <div className="mt-2">
                 <input
-                  type="text"
-                  name="last-name"
-                  id="last-name"
-                  autoComplete="family-name"
+                  type="number"
+                  name="world_ranking"
+                  id="world_ranking"
+                  autoComplete="number"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -105,12 +156,12 @@ export default function AddScholarship() {
                 htmlFor="about"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                About
+                description
               </label>
               <div className="mt-2">
                 <textarea
                   id="about"
-                  name="about"
+                  name="description"
                   rows={3}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   defaultValue={""}
@@ -142,7 +193,7 @@ export default function AddScholarship() {
                       <span>Upload a file</span>
                       <input
                         id="file-upload"
-                        name="file-upload"
+                        name="file_upload"
                         type="file"
                         className="sr-only"
                       />
@@ -217,7 +268,7 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="street-address"
+                  name="street_address"
                   id="street-address"
                   autoComplete="street-address"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -253,7 +304,7 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="postal-code"
+                  name="postal_code"
                   id="postal-code"
                   autoComplete="postal-code"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -284,7 +335,7 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <select
                   id="country"
-                  name="country"
+                  name="subject_category"
                   autoComplete="country-name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -304,7 +355,7 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <select
                   id="country"
-                  name="country"
+                  name="scholarship_category"
                   autoComplete="country-name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -324,7 +375,7 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <select
                   id="country"
-                  name="country"
+                  name="programme"
                   autoComplete="country-name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -349,7 +400,7 @@ export default function AddScholarship() {
                 </div>
                 <input
                   type="text"
-                  name="price"
+                  name="tution_fee"
                   id="price"
                   className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="0.00"
@@ -379,7 +430,7 @@ export default function AddScholarship() {
                 </div>
                 <input
                   type="text"
-                  name="price"
+                  name="application_fee"
                   id="price"
                   className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="0.00"
@@ -409,7 +460,7 @@ export default function AddScholarship() {
                 </div>
                 <input
                   type="text"
-                  name="price"
+                  name="service_charge"
                   id="price"
                   className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="0.00"

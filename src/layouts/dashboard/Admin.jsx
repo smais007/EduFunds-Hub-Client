@@ -1,18 +1,5 @@
-/*
-  This example requires some changes to your config:
 
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import { useState } from "react";
+import {  useContext, useState } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -43,6 +30,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { Outlet } from "react-router-dom";
 import Footer from "../../components/DashboardComponent/Footer";
+import { AuthContext } from "@/context/AuthProvider";
 
 const navigation = [
   { name: "Dashboard", href: "dashboard", icon: HomeIcon, current: false },
@@ -107,6 +95,7 @@ function classNames(...classes) {
 
 export default function Admin() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const {user} = useContext(AuthContext)
 
   return (
     <>
@@ -340,7 +329,7 @@ export default function Admin() {
                           className="ml-4 text-sm font-semibold leading-6 text-gray-900"
                           aria-hidden="true"
                         >
-                          Tom Cook
+                        {user?.displayName}
                         </span>
                         <ChevronDownIcon
                           className="ml-2 h-5 w-5 text-gray-400"

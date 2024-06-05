@@ -11,6 +11,8 @@ import {
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import app from "../service/firebase";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { toast } from "sonner";
 // import axios from "axios";
 
 export const AuthContext = createContext();
@@ -18,6 +20,8 @@ const auth = getAuth(app);
 
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
+  const axiosPublic = useAxiosPublic();
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -44,9 +48,27 @@ const AuthProvider = ({ children }) => {
     });
   };
 
+  // const googleLogin = () => {
+  //   setLoading(true);
+  //   return signInWithPopup(auth, googleProvider);
+  // };
+
   const googleLogin = () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    signInWithPopup(auth, googleProvider).then((result) => {
+      const user = result.user;
+      const userInfo = {
+        name: user.displayName,
+        email: user.email,
+        profileImage: user.photoURL,
+      };
+      axiosPublic.post("/users", userInfo).then((res) => {
+        //console.log(res.data);
+        if (res.data.insertedId) {
+          toast.success("Account creaded succesfully");
+        }
+      });
+    });
   };
 
   const githubLogin = () => {

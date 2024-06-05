@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { passwordValidation } from "../utils/passwordValidation";
 import { BiShow, BiHide } from "react-icons/bi";
 import { AuthContext } from "../context/AuthProvider";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
 
 export default function Signup() {
   const { createUser, updateUserProfile, googleLogin, githubLogin } =
@@ -12,6 +13,8 @@ export default function Signup() {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const axiosPublic = useAxiosPublic();
 
   // React Hook form
   const {
@@ -39,8 +42,18 @@ export default function Signup() {
 
     createUser(email, password).then(() => {
       updateUserProfile(fullName, image).then(() => {
-        toast.success("Your account created succesfully");
-        navigate(location?.state ? location.state : "/");
+        const userInfo = {
+          name: data.fullName,
+          email: data.email,
+
+        };
+        axiosPublic.post("/users", userInfo).then((res) => {
+          console.log(res.data);
+          if (res.data.insertedId) {
+            toast.success("Your account created succesfully");
+            navigate(location?.state ? location.state : "/");
+          }
+        });
       });
     });
     // .catch((error) => {
@@ -219,7 +232,7 @@ export default function Signup() {
                     googleLogin(
                       navigate(location?.state ? location.state : "/")
                     );
-                    toast.success("Login success");
+                    // toast.success("Login successfull");
                   }}
                   className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent dark:text-white dark:ring-gray-700 dark:bg-gray-900"
                 >

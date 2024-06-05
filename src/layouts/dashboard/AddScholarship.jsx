@@ -1,78 +1,92 @@
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { Navigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTINK_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 export default function AddScholarship() {
-  const handleAddScholarship = (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const scholarship_name = form.scholarship_name.value;
-    const university_name = form.university_name.value;
-    const local_ranking = form.local_ranking.value;
-    const world_ranking = form.world_ranking.value;
-    const description = form.description.value;
-    const file_upload = form.file_upload.value;
-    const country = form.country.value;
-    const city = form.city.value;
-    const street_address = form.street_address.value;
-    const region = form.region.value;
-    const postal_code = form.postal_code.value;
-    const subject_category = form.subject_category.value;
-    const scholarship_category = form.scholarship_category.value;
-    const programme = form.programme.value;
-    const tution_fee = form.tution_fee.value;
-    const application_fee = form.application_fee.value;
-    const service_charge = form.service_charge.value;
-    const posted_date = new Date();
+  const { register, handleSubmit, reset } = useForm();
+  // const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
 
-    const addScholarship = {
-      scholarship_name,
-      university_name,
-      local_ranking,
-      world_ranking,
-      description,
-      country,
-      city,
-      street_address,
-      region,
-      postal_code,
-      subject_category,
-      scholarship_category,
-      programme,
-      tution_fee,
-      application_fee,
-      service_charge,
-      posted_date,
-      file_upload,
-    };
+  const onSubmit = async (data) => {
+    // const posted_date = new Date();
+    // const addScholarship = { ...data };
 
-    console.log(addScholarship);
+    console.log(data);
 
-    fetch("http://localhost:5000/scholarships", {
-      method: "POST",
+    const imageFile = { image: data.image[0] };
+
+    const res = await axiosPublic.post(image_hosting_api, imageFile, {
       headers: {
-        "content-type": "application/json",
+        "content-type": "multipart/form-data",
       },
-      body: JSON.stringify(addScholarship),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.insertedId) {
-          toast.success("Scholarship added Succesfully!");
-          form.reset();
-          Navigate(location?.state ? location.state : "/dashboard");
-        }
-      });
+    });
+
+    // console.log(res);
+
+    if (res.data.success) {
+      const scholarshipInfo = {
+        scholarship_name: data.scholarship_name,
+        university_name: data.university_name,
+        local_ranking: data.local_ranking,
+        world_ranking: data.world_ranking,
+        description: data.description,
+        country: data.country,
+        city: data.city,
+        region: data.region,
+        postal_code: data.postal_code,
+        image: res.data.data.display_url,
+        subject_category: data.subject_category,
+        scholarship_category: data.scholarship_category,
+        programme: data.programme,
+        tution_fee: data.tution_fee,
+        application_fee: data.application_fee,
+        service_charge: data.service_charge,
+      };
+
+      const addScholarship = await axiosSecure.post(
+        "/scholarships",
+        scholarshipInfo
+      );
+      //console.log(addScholarship);
+      if (addScholarship.data.insertedId) {
+        toast.success("Scholarship added Successfully!");
+        reset();
+      }
+    }
+    // fetch("http://localhost:5000/scholarships", {
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    //   body: JSON.stringify(addScholarship),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     if (data.insertedId) {
+    //       toast.success("Scholarship added Successfully!");
+    //       reset();
+    //       navigate(
+    //         location?.state ? location.state : "/dashboard/add-scholarship"
+    //       );
+    //     }
+    //   });
   };
 
   return (
-    <form onSubmit={handleAddScholarship}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-12">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
           <div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">
-              Univercity Information
+              University Information
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-600">
               This information will be displayed publicly so be careful what you
@@ -83,15 +97,15 @@ export default function AddScholarship() {
           <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
             <div className="col-span-full">
               <label
-                htmlFor="street-address"
+                htmlFor="scholarship_name"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Scholaship Name
+                Scholarship Name
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="scholarship_name"
+                  {...register("scholarship_name")}
                   id="scholarship_name"
                   autoComplete="scholarship_name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -100,7 +114,7 @@ export default function AddScholarship() {
             </div>
             <div className="col-span-full">
               <label
-                htmlFor="street-address"
+                htmlFor="university_name"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 University Name
@@ -108,24 +122,24 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="university_name"
+                  {...register("university_name")}
                   id="university_name"
-                  autoComplete="university-name"
+                  autoComplete="university_name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
             <div className="sm:col-span-3">
               <label
-                htmlFor="first-name"
+                htmlFor="local_ranking"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Local Ranking
               </label>
               <div className="mt-2">
                 <input
-                  type="text"
-                  name="local_ranking"
+                  type="number"
+                  {...register("local_ranking")}
                   id="local_ranking"
                   autoComplete="number"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -135,7 +149,7 @@ export default function AddScholarship() {
 
             <div className="sm:col-span-3">
               <label
-                htmlFor="last-name"
+                htmlFor="world_ranking"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 World Ranking
@@ -143,7 +157,7 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="number"
-                  name="world_ranking"
+                  {...register("world_ranking")}
                   id="world_ranking"
                   autoComplete="number"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -153,18 +167,17 @@ export default function AddScholarship() {
 
             <div className="col-span-full">
               <label
-                htmlFor="about"
+                htmlFor="description"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                description
+                Description
               </label>
               <div className="mt-2">
                 <textarea
-                  id="about"
-                  name="description"
+                  id="description"
+                  {...register("description")}
                   rows={3}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  defaultValue={""}
                 />
               </div>
               <p className="mt-3 text-sm leading-6 text-gray-600">
@@ -174,10 +187,10 @@ export default function AddScholarship() {
 
             <div className="col-span-full">
               <label
-                htmlFor="cover-photo"
+                htmlFor="file_upload"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                University photo
+                University Photo
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
@@ -187,16 +200,18 @@ export default function AddScholarship() {
                   />
                   <div className="mt-4 flex text-sm leading-6 text-gray-600">
                     <label
-                      htmlFor="file-upload"
+                      htmlFor="file_upload"
                       className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                     >
                       <span>Upload a file</span>
-                      <input
-                        id="file-upload"
-                        name="file_upload"
+                      {/* <input
+                        id="file_upload"
+                        {...register("image")}
                         type="file"
-                        className="sr-only"
-                      />
+                         className="sr-only"
+                      /> */}
+
+                      <input type="file" {...register("image")} />
                     </label>
                     <p className="pl-1">or drag and drop</p>
                   </div>
@@ -212,7 +227,7 @@ export default function AddScholarship() {
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
           <div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">
-              Univercity Address
+              University Address
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-600">
               Use a permanent address where you can receive mail.
@@ -230,7 +245,7 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <select
                   id="country"
-                  name="country"
+                  {...register("country")}
                   autoComplete="country-name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -250,27 +265,9 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="city"
+                  {...register("city")}
                   id="city"
                   autoComplete="address-level2"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="street-address"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Street address
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  name="street_address"
-                  id="street-address"
-                  autoComplete="street-address"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -286,7 +283,7 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="region"
+                  {...register("region")}
                   id="region"
                   autoComplete="address-level1"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -296,7 +293,7 @@ export default function AddScholarship() {
 
             <div className="sm:col-span-3">
               <label
-                htmlFor="postal-code"
+                htmlFor="postal_code"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 ZIP / Postal code
@@ -304,182 +301,170 @@ export default function AddScholarship() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="postal_code"
-                  id="postal-code"
-                  autoComplete="postal-code"
+                  {...register("postal_code")}
+                  id="postal_code"
+                  autoComplete="postal_code"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-          <div>
-            <h2 className="text-base font-semibold leading-7 text-gray-900">
-              Scholarship Information
-            </h2>
-            <p className="mt-1 text-sm leading-6 text-gray-600">
-              Use a permanent address where you can receive mail.
-            </p>
+      {/* Schloaship fee and charges */}
+      <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pt-12 pb-12 md:grid-cols-3">
+        <div>
+          <h2 className="text-base font-semibold leading-7 text-gray-900">
+            Scholarship Information
+          </h2>
+          <p className="mt-1 text-sm leading-6 text-gray-600">
+            Use a permanent address where you can receive mail.
+          </p>
+        </div>
+
+        <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="country"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Subject Category
+            </label>
+            <div className="mt-2">
+              <select
+                id="country"
+                {...register("subject_category")}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option>Agriculture</option>
+                <option>Engineering</option>
+                <option>Doctor</option>
+              </select>
+            </div>
+          </div>
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="country"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Scholarship Category
+            </label>
+            <div className="mt-2">
+              <select
+                id="country"
+                {...register("scholarship_category")}
+                autoComplete="country-name"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option>Full fund</option>
+                <option>Partial</option>
+                <option>Self-fund</option>
+              </select>
+            </div>
+          </div>
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="country"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Programme
+            </label>
+            <div className="mt-2">
+              <select
+                id="programme"
+                {...register("programme")}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option>Diploma</option>
+                <option>Bachelor</option>
+                <option>Masters</option>
+                <option>PhD</option>
+              </select>
+            </div>
           </div>
 
-          <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Subject Category
-              </label>
-              <div className="mt-2">
-                <select
-                  id="country"
-                  name="subject_category"
-                  autoComplete="country-name"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option>Agriculture</option>
-                  <option>Engineering</option>
-                  <option>Doctor</option>
-                </select>
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="price"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Tution Fee
+            </label>
+            <div className="relative mt-2 rounded-md shadow-sm">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <span className="text-gray-500 sm:text-sm">$</span>
+              </div>
+              <input
+                type="text"
+                {...register("tution_fee")}
+                id="price"
+                className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="0.00"
+                aria-describedby="price-currency"
+              />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <span className="text-gray-500 sm:text-sm" id="price-currency">
+                  USD
+                </span>
               </div>
             </div>
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Scholarship Category
-              </label>
-              <div className="mt-2">
-                <select
-                  id="country"
-                  name="scholarship_category"
-                  autoComplete="country-name"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option>Full fund</option>
-                  <option>Partial</option>
-                  <option>Self-fund</option>
-                </select>
-              </div>
-            </div>
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Programme
-              </label>
-              <div className="mt-2">
-                <select
-                  id="country"
-                  name="programme"
-                  autoComplete="country-name"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option>Diploma</option>
-                  <option>Bachelor</option>
-                  <option>Masters</option>
-                  <option>PhD</option>
-                </select>
-              </div>
-            </div>
+          </div>
 
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="price"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Tution Fee
-              </label>
-              <div className="relative mt-2 rounded-md shadow-sm">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <span className="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="text"
-                  name="tution_fee"
-                  id="price"
-                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="0.00"
-                  aria-describedby="price-currency"
-                />
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                  <span
-                    className="text-gray-500 sm:text-sm"
-                    id="price-currency"
-                  >
-                    USD
-                  </span>
-                </div>
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="price"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Application Fee
+            </label>
+            <div className="relative mt-2 rounded-md shadow-sm">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <span className="text-gray-500 sm:text-sm">$</span>
+              </div>
+              <input
+                type="text"
+                {...register("application_fee")}
+                id="price"
+                className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="0.00"
+                aria-describedby="price-currency"
+              />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <span className="text-gray-500 sm:text-sm" id="price-currency">
+                  USD
+                </span>
               </div>
             </div>
+          </div>
 
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="price"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Application Fee
-              </label>
-              <div className="relative mt-2 rounded-md shadow-sm">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <span className="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="text"
-                  name="application_fee"
-                  id="price"
-                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="0.00"
-                  aria-describedby="price-currency"
-                />
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                  <span
-                    className="text-gray-500 sm:text-sm"
-                    id="price-currency"
-                  >
-                    USD
-                  </span>
-                </div>
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="price"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Service Charge
+            </label>
+            <div className="relative mt-2 rounded-md shadow-sm">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <span className="text-gray-500 sm:text-sm">$</span>
               </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="price"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Service Charge
-              </label>
-              <div className="relative mt-2 rounded-md shadow-sm">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <span className="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="text"
-                  name="service_charge"
-                  id="price"
-                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="0.00"
-                  aria-describedby="price-currency"
-                />
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                  <span
-                    className="text-gray-500 sm:text-sm"
-                    id="price-currency"
-                  >
-                    USD
-                  </span>
-                </div>
+              <input
+                type="text"
+                {...register("service_charge")}
+                id="price"
+                className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="0.00"
+                aria-describedby="price-currency"
+              />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <span className="text-gray-500 sm:text-sm" id="price-currency">
+                  USD
+                </span>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Scholarship information */}
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
@@ -493,7 +478,7 @@ export default function AddScholarship() {
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Add Scholarship
+          Save
         </button>
       </div>
     </form>

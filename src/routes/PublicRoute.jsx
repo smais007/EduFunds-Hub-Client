@@ -19,6 +19,8 @@ import ManageReviews from "@/pages/Dashboard/ManageReviews";
 import AllAppliedScholarship from "@/pages/Dashboard/AllAppliedScholarship";
 import ScholarshipDetails from "@/pages/ScholarshipDetails";
 
+import Test from "../pages/Test";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -52,6 +54,10 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "/test",
+        element: <Test></Test>,
       },
     ],
   },

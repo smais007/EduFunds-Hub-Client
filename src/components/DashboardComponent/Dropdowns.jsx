@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Menu,
   MenuButton,
@@ -11,7 +12,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Example({ onSelect }) {
+  const handleSelect = (value) => {
+    if (onSelect) {
+      onSelect(value);
+    }
+  };
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -35,40 +41,41 @@ export default function Example() {
           <div className="py-1">
             <MenuItem>
               {({ focus }) => (
-                <p
+                <button
                   className={classNames(
                     focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm"
+                    "block px-4 py-2 text-sm w-full text-left"
                   )}
+                  onClick={() => handleSelect("Member")}
                 >
                   Member
-                </p>
+                </button>
               )}
             </MenuItem>
             <MenuItem>
               {({ focus }) => (
-                <p
-                  href="#"
+                <button
                   className={classNames(
                     focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm"
+                    "block px-4 py-2 text-sm w-full text-left"
                   )}
+                  onClick={() => handleSelect("Moderator")}
                 >
                   Moderator
-                </p>
+                </button>
               )}
             </MenuItem>
             <MenuItem>
               {({ focus }) => (
-                <p
-                  href="#"
+                <button
                   className={classNames(
                     focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm"
+                    "block px-4 py-2 text-sm w-full text-left"
                   )}
+                  onClick={() => handleSelect("Admin")}
                 >
                   Admin
-                </p>
+                </button>
               )}
             </MenuItem>
           </div>

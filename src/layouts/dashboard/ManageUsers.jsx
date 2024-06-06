@@ -1,81 +1,82 @@
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 import Dropdowns from "../../components/DashboardComponent/Dropdowns";
-
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  // More people...
-];
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import Swal from "sweetalert2";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function ManageUsers() {
+  const axiosSecure = useAxiosSecure();
+  const { data: users = [], refetch } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/users");
+      return res.data;
+    },
+  });
+
+  const [selectedRole, setSelectedRole] = useState("");
+
+  // const handleSelect = (role) => {
+  //   setSelectedRole(role);
+  //   console.log(`Selected role: ${role}`);
+  //   console.log(selectedRole);
+  // };
+
+  const handleSelect = async (role, userId) => {
+    try {
+      const response = await axiosSecure.patch(`/users/role/${userId}`, {
+        role,
+      });
+      if (response.status === 200) {
+        refetch()
+        console.log(`Role updated to ${role} for user with ID ${userId}`);
+        // Optionally, refetch users to reflect the change
+      }
+    } catch (error) {
+      console.error("Error updating role:", error);
+    }
+  };
+
+  const handleDeleteUser = (user) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/users/${user._id}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+          }
+        });
+      }
+    });
+  };
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Users
+            Total Users : <span>{users.length}</span>
           </h1>
           <p className="mt-2 text-sm text-gray-700">
             A list of all the users in your account including their name, title,
             email and role.
           </p>
-        </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add user
-          </button>
         </div>
       </div>
       <div className="mt-8 flow-root">
@@ -112,54 +113,58 @@ export default function ManageUsers() {
                 </tr>
               </thead>
               <tbody>
-                {people.map((person, personIdx) => (
-                  <tr key={person.email}>
+                {users.map((user, personIdx) => (
+                  <tr key={user.email}>
                     <td
                       className={classNames(
-                        personIdx !== people.length - 1
+                        personIdx !== users.length - 1
                           ? "border-b border-gray-200"
                           : "",
                         "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                       )}
                     >
-                      {person.name}
+                      {user.name}
                     </td>
 
                     <td
                       className={classNames(
-                        personIdx !== people.length - 1
+                        personIdx !== users.length - 1
                           ? "border-b border-gray-200"
                           : "",
                         "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                       )}
                     >
-                      {person.email}
+                      {user.email}
                     </td>
                     <td
-                      className= {classNames(
-                        personIdx !== people.length - 1
+                      className={classNames(
+                        personIdx !== users.length - 1
                           ? "border-b border-gray-200"
                           : "",
                         "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       )}
                     >
-                      <div className="flex gap-1">{person.role}
-                      <Dropdowns></Dropdowns></div>
+                      <div className="flex gap-1">
+                        {user.role}
+                        <Dropdowns
+                          onSelect={(role) => handleSelect(role, user._id)}
+                        ></Dropdowns>
+                      </div>
                     </td>
                     <td
                       className={classNames(
-                        personIdx !== people.length - 1
+                        personIdx !== users.length - 1
                           ? "border-b border-gray-200"
                           : "",
                         "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8"
                       )}
                     >
-                      <a
-                        href="#"
+                      <button
+                        onClick={() => handleDeleteUser(user)}
                         className="text-red-500 hover:text-red-700"
                       >
-                        Delete<span className="sr-only">, {person.name}</span>
-                      </a>
+                        Delete<span className="sr-only">, {user.name}</span>
+                      </button>
                     </td>
                   </tr>
                 ))}

@@ -1,8 +1,8 @@
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import Dropdowns from "../../components/DashboardComponent/Dropdowns";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -18,7 +18,7 @@ export default function ManageUsers() {
     },
   });
 
-  const [selectedRole, setSelectedRole] = useState("");
+  // const [selectedRole, setSelectedRole] = useState("");
 
   // const handleSelect = (role) => {
   //   setSelectedRole(role);
@@ -32,8 +32,8 @@ export default function ManageUsers() {
         role,
       });
       if (response.status === 200) {
-        refetch()
-        console.log(`Role updated to ${role} for user with ID ${userId}`);
+        refetch();
+        toast.success(`Role updated to ${role} for user with ID ${userId}`);
         // Optionally, refetch users to reflect the change
       }
     } catch (error) {

@@ -88,27 +88,20 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-      // const userEmail = currentUser?.email || user?.email;
-      // const loggedUser = { email: userEmail };
       setUser(currentUser);
+      if (currentUser) {
+        // get token and store client
+        const userInfo = { email: currentUser.email };
+        axiosPublic.post("/jwt", userInfo).then((res) => {
+          if (res.data.token) {
+            localStorage.setItem("access-token", res.data.token);
+          }
+        });
+      } else {
+        // TODO: remove token (if token stored in the client side: Local storage, caching, in memory)
+        localStorage.removeItem("access-token");
+      }
       setLoading(false);
-      // if (currentUser) {
-      //   axios
-      //     .post("https://apis-server-eight.vercel.app/jwt", loggedUser, {
-      //       withCredentials: true,
-      //     })
-      //     .then((res) => {
-      //       console.log("login response", res.data);
-      //     });
-      // } else {
-      //   axios
-      //     .post("https://apis-server-eight.vercel.app/logout", loggedUser, {
-      //       withCredentials: true,
-      //     })
-      //     .then((res) => {
-      //       console.log(res.data);
-      //     });
-      // }
     });
     return () => {
       unSubscribe();

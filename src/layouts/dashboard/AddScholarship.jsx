@@ -60,24 +60,6 @@ export default function AddScholarship() {
         reset();
       }
     }
-    // fetch("http://localhost:5000/scholarships", {
-    //   method: "POST",
-    //   headers: {
-    //     "content-type": "application/json",
-    //   },
-    //   body: JSON.stringify(addScholarship),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     if (data.insertedId) {
-    //       toast.success("Scholarship added Successfully!");
-    //       reset();
-    //       navigate(
-    //         location?.state ? location.state : "/dashboard/add-scholarship"
-    //       );
-    //     }
-    //   });
   };
 
   return (
@@ -462,6 +444,38 @@ export default function AddScholarship() {
                   USD
                 </span>
               </div>
+            </div>
+          </div>
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="local_ranking"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Application Start from
+            </label>
+            <div className="mt-2">
+              <input
+                type="date"
+                {...register("apply_start_at")}
+                id="deadline"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="local_ranking"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Deadline
+            </label>
+            <div className="mt-2">
+              <input
+                type="date"
+                {...register("deadline")}
+                id="deadline"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import {
   StarIcon,
 } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function ScholarshipDetails() {
   const { id } = useParams();
@@ -178,12 +178,12 @@ export default function ScholarshipDetails() {
 
             <hr className="divide-y divide-gray-100 rounded-md border border-gray-200" />
             <div className="pt-10 flex justify-end">
-              <button
-                type="button"
+              <Link
+                to={`/details/${scholarship._id}/payment`}
                 className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
               >
                 Apply Now
-              </button>
+              </Link>
             </div>
           </dl>
         </div>

@@ -5,11 +5,34 @@ import { useState } from "react";
 import AppleLogo from "../../src/assets/apple.svg";
 import Paypal from "../../src/assets/paypal.svg";
 import { ReactSVG } from "react-svg";
+import { useParams } from "react-router-dom";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
-const total = "$341.68";
+
 
 export default function Payment() {
-  const [selectedMethod, setSelectedMethod] = useState("card");
+    const { id } = useParams();
+    const axiosSecure = useAxiosSecure();
+    const [selectedMethod, setSelectedMethod] = useState("card");
+
+    const {
+      data: scholarship,
+      isLoading,
+      error,
+    } = useQuery({
+      queryKey: ["scholarship", id],
+      queryFn: async () => {
+        const res = await axiosSecure.get(`/scholarships/${id}`);
+        return res.data;
+      },
+    });
+
+    console.log(scholarship)
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error loading scholarship details</div>;
+
   return (
     <>
       <main className="lg:flex lg:min-h-full lg:flex-row-reverse lg:overflow-hidden">
@@ -49,7 +72,9 @@ export default function Payment() {
                   }`}
                   onClick={() => setSelectedMethod("paypal")}
                 >
-                  <ReactSVG src={Paypal} className="w-6 h-6" />
+                 <div className="pb-3">
+                 <ReactSVG src={Paypal} className="w-6 h-6" />
+                 </div>
                   <p>Paypal</p>
                 </div>
                 <div
@@ -60,8 +85,10 @@ export default function Payment() {
                   }`}
                   onClick={() => setSelectedMethod("apple")}
                 >
-                  <ReactSVG src={AppleLogo} className="w-6 h-6" />
-                  <p>Apple</p>
+                  <div className="pb-3">
+                  <ReactSVG src={AppleLogo} className="w-6 h-6 " />
+                  </div>
+                  <p className="">Apple</p>
                 </div>
               </div>
             </div>
@@ -191,7 +218,7 @@ export default function Payment() {
                 type="submit"
                 className="mt-6 w-full rounded-md border border-transparent bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
               >
-                Pay {total}
+                Pay $ {scholarship.application_fee}
               </button>
 
               <p className="mt-6 flex justify-center text-sm font-medium text-gray-500">

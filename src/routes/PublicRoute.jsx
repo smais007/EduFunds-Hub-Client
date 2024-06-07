@@ -20,6 +20,7 @@ import AllAppliedScholarship from "@/pages/Dashboard/AllAppliedScholarship";
 import ScholarshipDetails from "@/pages/ScholarshipDetails";
 
 import Test from "../pages/Test";
+import Payment from "@/pages/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -43,10 +44,10 @@ export const router = createBrowserRouter([
         path: "/scholarship",
         element: <Scholarship></Scholarship>,
       },
-      {
-        path: "/scholarship-details",
-        element: <ScholarshipDetails></ScholarshipDetails>,
-      },
+      // {
+      //   path: "/scholarship-details",
+      //   element: <ScholarshipDetails></ScholarshipDetails>,
+      // },
       {
         path: "/login",
         element: <Login></Login>,
@@ -58,6 +59,14 @@ export const router = createBrowserRouter([
       {
         path: "/test",
         element: <Test></Test>,
+      },
+      {
+        path: "/details/:id",
+        element: <ScholarshipDetails></ScholarshipDetails>,
+      },
+      {
+        path: "/payment",
+        element: <Payment></Payment>,
       },
     ],
   },

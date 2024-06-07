@@ -48,6 +48,8 @@ export default function AddScholarship() {
         tution_fee: data.tution_fee,
         application_fee: data.application_fee,
         service_charge: data.service_charge,
+        apply_start_at: data.apply_start_at,
+        deadline: data.deadline,
       };
 
       const addScholarship = await axiosSecure.post(

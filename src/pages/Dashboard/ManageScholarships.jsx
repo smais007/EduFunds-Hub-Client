@@ -3,6 +3,7 @@ import {
   DocumentDuplicateIcon,
   PencilIcon,
   TrashIcon,
+  CheckIcon,
 } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
@@ -14,10 +15,15 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/outline";
 
 export default function ManageScholarships() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    ud_deadline: "",
+    ud_tution_fee: "",
+    ud_application_fee: "",
+    ud_service_charge: "",
+  });
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -56,6 +62,23 @@ export default function ManageScholarships() {
     });
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Perform the API call or other actions with formData
+    console.log("Form Data:", formData);
+
+    // Close the modal after submission
+    closeModal();
+  };
+
   return (
     <>
       <div className="px-4 sm:px-6 lg:px-8">
@@ -73,6 +96,7 @@ export default function ManageScholarships() {
             <button
               type="button"
               className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={openModal}
             >
               Add New Scholarship
             </button>
@@ -92,7 +116,7 @@ export default function ManageScholarships() {
                   scope="col"
                   className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                 >
-                  Univercity Name
+                  University Name
                 </th>
                 <th
                   scope="col"
@@ -157,201 +181,6 @@ export default function ManageScholarships() {
                         </button>
                         <button onClick={openModal}>
                           <PencilIcon className="h-6"></PencilIcon>
-                          <Transition
-                            show={isModalOpen}
-                            as="div"
-                            className="fixed inset-0 z-40 overflow-y-auto"
-                          >
-                            <Dialog
-                              as="div"
-                              className="relative z-40"
-                              onClose={closeModal}
-                            >
-                              <TransitionChild
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                              </TransitionChild>
-
-                              <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                                <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                                  <TransitionChild
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                  >
-                                    <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                                      <div>
-                                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                                          <CheckIcon
-                                            className="h-6 w-6 text-green-600"
-                                            aria-hidden="true"
-                                          />
-                                        </div>
-                                        <div className="mt-3 text-center sm:mt-5">
-                                          <DialogTitle
-                                            as="h3"
-                                            className="text-base font-semibold leading-6 text-gray-900"
-                                          >
-                                            Payment successful
-                                          </DialogTitle>
-                                          <div className="mt-2">
-                                            <p className="text-sm text-gray-500">
-                                              Lorem ipsum, dolor sit amet
-                                              consectetur adipisicing elit. Eius
-                                              aliquam laudantium explicabo
-                                              pariatur iste dolorem animi vitae
-                                              error totam. At sapiente aliquam
-                                              accusamus facere veritatis.
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <form action="">
-                                          <div className="mt-3 text-left sm:mt-5">
-                                            <div>
-                                              <label
-                                                htmlFor="email"
-                                                className="block text-sm font-medium leading-6 text-gray-900"
-                                              >
-                                                Deadline
-                                              </label>
-                                              <div className="mt-2">
-                                                <input
-                                                  type="date"
-                                                  name="ud_deadline"
-                                                  id="name"
-                                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                  placeholder="Smais"
-                                                />
-                                              </div>
-                                            </div>
-                                            <div>
-                                              <label
-                                                htmlFor="price"
-                                                className="block text-sm font-medium leading-6 text-gray-900"
-                                              >
-                                                Tution Fee
-                                              </label>
-                                              <div className="relative mt-2 rounded-md shadow-sm">
-                                                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                  <span className="text-gray-500 sm:text-sm">
-                                                    $
-                                                  </span>
-                                                </div>
-                                                <input
-                                                  type="text"
-                                                  name="ud_tution_fee"
-                                                  id="price"
-                                                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                  placeholder="0.00"
-                                                  aria-describedby="price-currency"
-                                                />
-                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                                  <span
-                                                    className="text-gray-500 sm:text-sm"
-                                                    id="price-currency"
-                                                  >
-                                                    USD
-                                                  </span>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div>
-                                              <label
-                                                htmlFor="price"
-                                                className="block text-sm font-medium leading-6 text-gray-900"
-                                              >
-                                                Application Fee
-                                              </label>
-                                              <div className="relative mt-2 rounded-md shadow-sm">
-                                                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                  <span className="text-gray-500 sm:text-sm">
-                                                    $
-                                                  </span>
-                                                </div>
-                                                <input
-                                                  type="text"
-                                                  name="ud_application_fee"
-                                                  id="price"
-                                                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                  placeholder="0.00"
-                                                  aria-describedby="price-currency"
-                                                />
-                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                                  <span
-                                                    className="text-gray-500 sm:text-sm"
-                                                    id="price-currency"
-                                                  >
-                                                    USD
-                                                  </span>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div>
-                                              <label
-                                                htmlFor="price"
-                                                className="block text-sm font-medium leading-6 text-gray-900"
-                                              >
-                                                Service Charge
-                                              </label>
-                                              <div className="relative mt-2 rounded-md shadow-sm">
-                                                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                  <span className="text-gray-500 sm:text-sm">
-                                                    $
-                                                  </span>
-                                                </div>
-                                                <input
-                                                  type="text"
-                                                  name="ud_service_charge"
-                                                  id="price"
-                                                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                  placeholder="0.00"
-                                                  aria-describedby="price-currency"
-                                                />
-                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                                  <span
-                                                    className="text-gray-500 sm:text-sm"
-                                                    id="price-currency"
-                                                  >
-                                                    USD
-                                                  </span>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </form>
-                                      </div>
-                                      {/* Fee Related Update */}
-
-                                      <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                                        <button
-                                          type="submit"
-                                          className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-                                        >
-                                          Update
-                                        </button>
-                                        {/* <button
-                                          type="button"
-                                          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                                          onClick={closeModal}
-                                        >
-                                          Cancel
-                                        </button> */}
-                                      </div>
-                                    </DialogPanel>
-                                  </TransitionChild>
-                                </div>
-                              </div>
-                            </Dialog>
-                          </Transition>
                         </button>
                         <button onClick={() => handleDeleteUser(scholarship)}>
                           <TrashIcon className="h-6"></TrashIcon>
@@ -365,6 +194,201 @@ export default function ManageScholarships() {
           </table>
         </div>
       </div>
+      <Transition
+        show={isModalOpen}
+        as="div"
+        className="fixed inset-0 z-40 overflow-y-auto"
+      >
+        <Dialog as="div" className="relative z-40" onClose={closeModal}>
+          <TransitionChild
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </TransitionChild>
+
+          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <TransitionChild
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                  <div>
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                      <CheckIcon
+                        className="h-6 w-6 text-green-600"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="mt-3 text-center sm:mt-5">
+                      <DialogTitle
+                        as="h3"
+                        className="text-base font-semibold leading-6 text-gray-900"
+                      >
+                        Payment successful
+                      </DialogTitle>
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-500">
+                          Lorem ipsum, dolor sit amet consectetur adipisicing
+                          elit. Eius aliquam laudantium explicabo pariatur iste
+                          dolorem animi vitae error totam. At sapiente aliquam
+                          accusamus facere veritatis.
+                        </p>
+                      </div>
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                      <div className="mt-3 text-left sm:mt-5">
+                        <div>
+                          <label
+                            htmlFor="ud_deadline"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Deadline
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              type="date"
+                              name="ud_deadline"
+                              id="ud_deadline"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              value={formData.ud_deadline}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="ud_tution_fee"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Tution Fee
+                          </label>
+                          <div className="relative mt-2 rounded-md shadow-sm">
+                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                              <span className="text-gray-500 sm:text-sm">
+                                $
+                              </span>
+                            </div>
+                            <input
+                              type="number"
+                              name="ud_tution_fee"
+                              id="ud_tution_fee"
+                              className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="0.00"
+                              aria-describedby="price-currency"
+                              value={formData.ud_tution_fee}
+                              onChange={handleInputChange}
+                            />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                              <span
+                                className="text-gray-500 sm:text-sm"
+                                id="price-currency"
+                              >
+                                USD
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="ud_application_fee"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Application Fee
+                          </label>
+                          <div className="relative mt-2 rounded-md shadow-sm">
+                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                              <span className="text-gray-500 sm:text-sm">
+                                $
+                              </span>
+                            </div>
+                            <input
+                              type="number"
+                              name="ud_application_fee"
+                              
+                              id="ud_application_fee"
+                              className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="0.00"
+                              aria-describedby="price-currency"
+                              value={formData.ud_application_fee}
+                              onChange={handleInputChange}
+                            />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                              <span
+                                className="text-gray-500 sm:text-sm"
+                                id="price-currency"
+                              >
+                                USD
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="ud_service_charge"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Service Charge
+                          </label>
+                          <div className="relative mt-2 rounded-md shadow-sm">
+                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                              <span className="text-gray-500 sm:text-sm">
+                                $
+                              </span>
+                            </div>
+                            <input
+                              type="number"
+                              name="ud_service_charge"
+                              id="ud_service_charge"
+                              className="block w-full rounded-md border-0 py-1.5 pl-7 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="0.00"
+                              aria-describedby="price-currency"
+                              value={formData.ud_service_charge}
+                              onChange={handleInputChange}
+                            />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                              <span
+                                className="text-gray-500 sm:text-sm"
+                                id="price-currency"
+                              >
+                                USD
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                        <button
+                          type="submit"
+                          className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                        >
+                          Update
+                        </button>
+                        {/* <button
+                          type="button"
+                          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                          onClick={closeModal}
+                        >
+                          Cancel
+                        </button> */}
+                      </div>
+                    </form>
+                  </div>
+                </DialogPanel>
+              </TransitionChild>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </>
   );
 }

@@ -18,13 +18,6 @@ export default function ManageUsers() {
     },
   });
 
-  // const [selectedRole, setSelectedRole] = useState("");
-
-  // const handleSelect = (role) => {
-  //   setSelectedRole(role);
-  //   console.log(`Selected role: ${role}`);
-  //   console.log(selectedRole);
-  // };
 
   const handleSelect = async (role, userId) => {
     try {

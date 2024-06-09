@@ -24,7 +24,6 @@ export default function ManageScholarships() {
     application_fee: "",
     service_charge: "",
   });
-  console.log(formData);
   const openModal = (scholarship) => {
     setSelectedScholarship(scholarship);
     setFormData({

@@ -1,22 +1,33 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import { AuthContext } from "@/context/AuthProvider";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  // More people...
-];
+import { useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
 
 export default function MyReview() {
+  const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
+  const email = user.email;
+
+  const { data: payments = [] } = useQuery({
+    queryKey: ["payments", email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/payments/${email}`);
+      return res.data;
+    },
+  });
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Reviews
+            Reviews {payments.length}
           </h1>
           <p className="mt-2 text-sm text-gray-700">
             A list of all the users in your account including their name, title,
@@ -58,33 +69,33 @@ export default function MyReview() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {people.map((person) => (
-              <tr key={person.email}>
+            {payments.map((payment) => (
+              <tr key={payment._id}>
                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                  {person.name}
+                  {payment.scholarship_name}
                   <dl className="font-normal lg:hidden">
                     <dt className="sr-only">Title</dt>
                     <dd className="mt-1 truncate text-gray-700">
-                      {person.title}
+                      {payment.university_name}
                     </dd>
                     <dt className="sr-only sm:hidden">Email</dt>
                     <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                      {person.email}
+                      {payment.email}
                     </dd>
                   </dl>
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  {person.title}
+                  {payment.university_name}
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  {person.email}
+                  {payment.email}
                 </td>
                 <td className="px-3 py-4 text-sm text-gray-500">
-                  {person.role}
+                  {payment.role}
                 </td>
                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                   <a href="#" className="text-indigo-600 ">
-                    <span className="sr-only">, {person.name}</span>
+                    <span className="sr-only">, {payment.name}</span>
                     <div className="flex gap-2">
                       <PencilSquareIcon className="h-6"></PencilSquareIcon>
                       <TrashIcon className="h-6"></TrashIcon>

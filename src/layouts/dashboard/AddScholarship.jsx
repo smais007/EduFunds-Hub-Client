@@ -10,18 +10,12 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 
 export default function AddScholarship() {
   const { register, handleSubmit, reset } = useForm();
-  // const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
 
   const onSubmit = async (data) => {
-    // const posted_date = new Date();
-    // const addScholarship = { ...data };
-
     console.log(data);
-
     const imageFile = { image: data.image[0] };
-
     const res = await axiosPublic.post(image_hosting_api, imageFile, {
       headers: {
         "content-type": "multipart/form-data",

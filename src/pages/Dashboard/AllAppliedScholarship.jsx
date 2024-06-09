@@ -1,26 +1,50 @@
+import StatusDD from "@/components/StatusDD";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 import {
   ChatBubbleOvalLeftIcon,
   DocumentDuplicateIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  // More people...
-];
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function AllAppliedScholarship() {
+  const axiosSecure = useAxiosSecure();
+  const { data: applications = [], refetch } = useQuery({
+    queryKey: ["applications"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/payments");
+      return res.data;
+    },
+  });
+
+  // Status Updateing
+  const handleSelect = async (status, universityId) => {
+    try {
+      const response = await axiosSecure.patch(
+        `/payments/status/${universityId}`,
+        {
+          status,
+        }
+      );
+      if (response.status === 200) {
+        refetch();
+        toast.success(
+          `Role updated to ${status} for user with ID ${universityId}`
+        );
+        // Optionally, refetch users to reflect the change
+      }
+    } catch (error) {
+      console.error("Error updating role:", error);
+    }
+  };
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Manage All Applied Scholarship
+            Manage All Applied Scholarship {applications.length}
           </h1>
           <p className="mt-2 text-sm text-gray-700">
             A list of all the users in your account including their name, title,
@@ -86,58 +110,61 @@ export default function AllAppliedScholarship() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {people.map((person) => (
-              <tr key={person.email}>
+            {applications.map((application) => (
+              <tr key={application.email}>
                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                  {person.name}
+                  {application.university_name}
                   <dl className="font-normal lg:hidden">
                     <dt className="sr-only">Title</dt>
                     <dd className="mt-1 truncate text-gray-700">
-                      {person.title}
+                      {application.scholarship_name}
                     </dd>
                     <dd className="mt-1 truncate text-gray-700">
-                      {person.title}
+                      {application.title}
                     </dd>
                     <dd className="mt-1 truncate text-gray-700">
-                      Sub Catergoat
+                      {application.subject_category}
                     </dd>
                     <dt className="sr-only sm:hidden">Email</dt>
                     <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                      Masters
+                      {application.programme}
                     </dd>
                     <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                      $400
+                      $ {application.tution_fee}
                     </dd>
                     <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                      $00
+                      $ {application.service_charge}
                     </dd>
                   </dl>
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  {person.title}
+                  {application.scholarship_name}
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  {person.title}
+                  {application.scholarship_category}
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  Subject category
+                  {application.subject_category}
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  Masters
+                  {application.programme}
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  400
+                  $ {application.tution_fee}
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  00
+                  $ {application.service_charge}
                 </td>
 
                 <td className="px-3 py-4 text-sm text-gray-500">
-                  {person.role}
+                  {application.status}
+                  <StatusDD
+                    onSelect={(status) => handleSelect(status, application._id)}
+                  ></StatusDD>
                 </td>
                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                   <div className="text-indigo-600 ">
-                    <span className="sr-only">, {person.name}</span>
+                    <span className="sr-only">, {application.name}</span>
                     <div className="flex gap-2 h-8">
                       <button>
                         <DocumentDuplicateIcon className="h-6"></DocumentDuplicateIcon>

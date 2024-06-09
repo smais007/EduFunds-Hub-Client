@@ -21,6 +21,8 @@ import ScholarshipDetails from "@/pages/ScholarshipDetails";
 
 import Test from "../pages/Test";
 import Payment from "@/pages/Payment";
+import ApplicationForm from "@/pages/ApplicationForm";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -68,6 +70,10 @@ export const router = createBrowserRouter([
         path: "/details/:id/payment",
         element: <Payment></Payment>,
       },
+      {
+        path: "/details/:id/payment/application-form",
+        element: <ApplicationForm></ApplicationForm>,
+      },
     ],
   },
 
@@ -82,7 +88,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <MyProfile></MyProfile>,
+        element: (
+          <PrivateRoute>
+            <MyProfile></MyProfile>
+          </PrivateRoute>
+        ),
       },
       {
         path: "my-application",

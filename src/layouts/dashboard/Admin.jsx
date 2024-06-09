@@ -32,7 +32,7 @@ import Footer from "../../components/DashboardComponent/Footer";
 import { AuthContext } from "@/context/AuthProvider";
 
 const navigation = [
-  { name: "Dashboard", href: "dashboard", icon: HomeIcon, current: false },
+  { name: "Dashboard", href: "/", icon: HomeIcon, current: false },
   {
     name: "My Profile",
     href: "/dashboard/profile",
@@ -43,7 +43,7 @@ const navigation = [
     name: "My Application",
     href: "/dashboard/my-application",
     icon: DocumentTextIcon,
-    current: true,
+    current: false,
   },
   {
     name: "My Reviews",

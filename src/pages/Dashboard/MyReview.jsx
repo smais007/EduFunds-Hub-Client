@@ -12,12 +12,12 @@ export default function MyReview() {
     return <div>Loading...</div>;
   }
 
-  const email = user.email;
+  const email = user ? user.email : "";
 
-  const { data: payments = [] } = useQuery({
-    queryKey: ["payments", email],
+  const { data: reviews = [] } = useQuery({
+    queryKey: ["reviews", email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/payments/${email}`);
+      const res = await axiosSecure.get(`/reviews/${email}`);
       return res.data;
     },
   });
@@ -27,7 +27,7 @@ export default function MyReview() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Reviews {payments.length}
+            Reviews {reviews.length}
           </h1>
           <p className="mt-2 text-sm text-gray-700">
             A list of all the users in your account including their name, title,
@@ -69,33 +69,33 @@ export default function MyReview() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {payments.map((payment) => (
-              <tr key={payment._id}>
+            {reviews.map((review) => (
+              <tr key={review._id}>
                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                  {payment.scholarship_name}
+                  {review.scholarshipName}
                   <dl className="font-normal lg:hidden">
                     <dt className="sr-only">Title</dt>
                     <dd className="mt-1 truncate text-gray-700">
-                      {payment.university_name}
+                      {review.university}
                     </dd>
                     <dt className="sr-only sm:hidden">Email</dt>
                     <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                      {payment.email}
+                      {review.review}
                     </dd>
                   </dl>
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  {payment.university_name}
+                  {review.university}
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  {payment.email}
+                  {review.review}
                 </td>
                 <td className="px-3 py-4 text-sm text-gray-500">
-                  {payment.role}
+                  {review.rating}
                 </td>
                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                   <a href="#" className="text-indigo-600 ">
-                    <span className="sr-only">, {payment.name}</span>
+                    <span className="sr-only">, {review.name}</span>
                     <div className="flex gap-2">
                       <PencilSquareIcon className="h-6"></PencilSquareIcon>
                       <TrashIcon className="h-6"></TrashIcon>

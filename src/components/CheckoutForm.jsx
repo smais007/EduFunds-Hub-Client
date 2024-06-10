@@ -4,6 +4,7 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 // import { useHistory } from "react-router-dom";
 
 const CheckoutForm = () => {
@@ -12,11 +13,12 @@ const CheckoutForm = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const [clientSecret, setClientSecret] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [transactionId, setTransactionId] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  console.log(user);
+  // console.log(user);
 
   const {
     data: scholarship,
@@ -81,8 +83,9 @@ const CheckoutForm = () => {
     if (confirmError) {
       console.log("confirm error");
     } else {
-      console.log("payment intent", paymentIntent);
+      // console.log("payment intent", paymentIntent);
       if (paymentIntent.status === "succeeded") {
+        toast.success("Your payment has successfully done");
         setTransactionId(paymentIntent.id);
 
         const payment = {

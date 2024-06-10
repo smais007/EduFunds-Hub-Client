@@ -1,3 +1,4 @@
+import ReviewSlider from "@/components/ReviewSlider";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import {
   AcademicCapIcon,
@@ -187,6 +188,15 @@ export default function ScholarshipDetails() {
             </div>
           </dl>
         </div>
+      </div>
+      {/* Slider revie */}
+      <div className="mt-20">
+        <div>
+          <h1 className="text-2xl font-bold text-center pb-12">
+            Pepole who reviwed this Universitys scholarship
+          </h1>
+        </div>
+        <ReviewSlider></ReviewSlider>
       </div>
     </div>
   );

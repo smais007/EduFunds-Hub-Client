@@ -1,9 +1,10 @@
+import Spinner from "@/components/Spinner";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function ApplicationForm() {
@@ -11,6 +12,7 @@ export default function ApplicationForm() {
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, reset } = useForm();
+  const navigate = useNavigate();
 
   const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTINK_KEY;
   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -27,11 +29,10 @@ export default function ApplicationForm() {
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Spinner></Spinner>;
   if (error) return <div>Error loading scholarship details</div>;
 
   const onSubmit = async (data) => {
-    console.log(data);
     const imageFile = { image: data.applicant_image[0] };
     const res = await axiosPublic.post(image_hosting_api, imageFile, {
       headers: {
@@ -40,7 +41,12 @@ export default function ApplicationForm() {
     });
 
     // console.log(res);
-
+    if (res.data.success == true) {
+      toast.success("Your Application has been submitted!");
+      navigate("/dashboard/my-application");
+      reset();
+    }
+    console.log(res.data);
     if (res.data.success) {
       const applicentInfo = {
         phone_number: data.phone_number,
@@ -56,14 +62,8 @@ export default function ApplicationForm() {
         scholarshipId: id,
       };
 
-      const response = await axiosSecure.put(
-        "/payments",
-        applicentInfo
-      );
-      if (response.data.insertedId) {
-        toast.success("Your Application has been submitted!");
-        reset();
-      }
+      const response = await axiosSecure.put("/payments", applicentInfo);
+      console.log(response);
     }
   };
 

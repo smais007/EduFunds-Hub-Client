@@ -90,13 +90,14 @@ export default function MyApplication() {
   const handleReviewSubmit = async () => {
     const reviewData = {
       university: selectedUniversity,
+      scholarshipName: selectedScholarship,
+
+      postedDate: new Date(),
       review,
       email,
       rating,
-      scholarshipName: selectedScholarship,
       userName,
       userAva,
-      postedDate: new Date()
     };
 
     try {
@@ -261,7 +262,7 @@ export default function MyApplication() {
                     onClick={() =>
                       handleAddReview(
                         payment.university_name,
-                        payment.scholarship_name
+                        payment.scholarshipId
                       )
                     }
                   >
